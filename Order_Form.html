@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <base target="_top">
+    <style>
+      body { font-family: Arial, sans-serif; }
+      .form-group { margin-bottom: 10px; }
+      label { display: block; margin-bottom: 5px; }
+      input, select { width: 100%; padding: 5px; }
+      input[type="submit"] { background-color: #4CAF50; color: white; border: none; padding: 10px; cursor: pointer; }
+    </style>
+  </head>
+  <body>
+    <form id="orderForm">
+      <div class="form-group">
+        <label for="clientName">Client Name:</label>
+        <input type="text" id="clientName" name="clientName" required>
+      </div>
+      <div class="form-group">
+        <label for="domain">Domain:</label>
+        <input type="text" id="domain" name="domain" required>
+      </div>
+      <div class="form-group">
+        <label for="email">Email:</label>
+        <input type="email" id="email" name="email" required>
+      </div>
+      <div class="form-group">
+        <label for="licenseCount">License Count:</label>
+        <input type="number" id="licenseCount" name="licenseCount" required min="1">
+      </div>
+      <input type="submit" value="Submit Order">
+    </form>
+    
+    <script>
+      document.getElementById('orderForm').addEventListener('submit', function(e) {
+        e.preventDefault();
+        google.script.run.withSuccessHandler(onSuccess).withFailureHandler(onFailure)
+          .addNewOrder({
+            clientName: this.clientName.value,
+            domain: this.domain.value,
+            email: this.email.value,
+            licenseCount: this.licenseCount.value
+          });
+      });
+
+      function onSuccess(result) {
+        alert(result);
+        google.script.host.close();
+      }
+
+      function onFailure(error) {
+        alert('Error: ' + error.message);
+      }
+    </script>
+  </body>
+</html>
